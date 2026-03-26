@@ -9,14 +9,14 @@ import { Leaf } from 'lucide-react';
 export default function LoginPage() {
   initDefaultUser();
 
-  if (getCurrentUser()) {
-    return <Navigate to="/" replace />;
-  }
-
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  if (getCurrentUser()) {
+    return <Navigate to="/" replace />;
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +30,6 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="w-full max-w-sm">
-        {/* Brand */}
         <div className="text-center mb-8">
           <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center mx-auto mb-4">
             <Leaf className="w-8 h-8 text-primary-foreground" />
@@ -38,8 +37,6 @@ export default function LoginPage() {
           <h1 className="font-display text-3xl font-bold text-foreground">AyurVeda</h1>
           <p className="text-muted-foreground mt-1">Practice Management System</p>
         </div>
-
-        {/* Form */}
         <form onSubmit={handleSubmit} className="bg-card border rounded-xl p-6 space-y-4 shadow-sm">
           <div>
             <Label htmlFor="username">Username</Label>
