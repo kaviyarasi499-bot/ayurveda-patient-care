@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import PageTransition from '@/components/PageTransition';
 
 export default function AddPatientPage() {
   const { id } = useParams();
@@ -48,6 +49,7 @@ export default function AddPatientPage() {
   const update = (field: string, value: string) => setForm(f => ({ ...f, [field]: value }));
 
   return (
+    <PageTransition>
     <div className="max-w-2xl mx-auto space-y-6">
       <h1 className="font-display text-3xl font-bold text-foreground">
         {id ? 'Edit Patient' : 'Add New Patient'}
@@ -119,5 +121,6 @@ export default function AddPatientPage() {
         </div>
       </form>
     </div>
+    </PageTransition>
   );
 }
