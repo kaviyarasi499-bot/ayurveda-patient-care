@@ -121,5 +121,6 @@ export default function AddPatientPage() {
         </div>
       </form>
     </div>
+    </PageTransition>
   );
 }
