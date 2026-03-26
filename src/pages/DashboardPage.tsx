@@ -1,6 +1,6 @@
 import { getPatients } from '@/lib/store';
 import { Link } from 'react-router-dom';
-import { Users, UserPlus, Activity } from 'lucide-react';
+import { Users, UserPlus, Activity, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function DashboardPage() {
@@ -12,14 +12,18 @@ export default function DashboardPage() {
 
   return (
     <div className="max-w-5xl mx-auto space-y-8">
-      <div>
+      {/* Header */}
+      <div className="opacity-0 animate-fade-in-up">
         <h1 className="font-display text-3xl font-bold text-foreground">Dashboard</h1>
-        <p className="text-muted-foreground mt-1">Welcome to your Ayurvedic practice overview</p>
+        <p className="text-muted-foreground mt-1 flex items-center gap-1.5">
+          <Sparkles className="w-4 h-4 text-accent" />
+          Welcome to your Ayurvedic practice overview
+        </p>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="stat-card flex items-center gap-4">
+        <div className="stat-card flex items-center gap-4 opacity-0 animate-fade-in-up transition-transform duration-200 hover:scale-[1.03] hover:shadow-md" style={{ animationDelay: '0.1s' }}>
           <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
             <Users className="w-6 h-6 text-primary" />
           </div>
@@ -28,7 +32,7 @@ export default function DashboardPage() {
             <p className="text-sm text-muted-foreground">Total Patients</p>
           </div>
         </div>
-        <div className="stat-card flex items-center gap-4">
+        <div className="stat-card flex items-center gap-4 opacity-0 animate-fade-in-up transition-transform duration-200 hover:scale-[1.03] hover:shadow-md" style={{ animationDelay: '0.2s' }}>
           <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center">
             <Activity className="w-6 h-6 text-accent" />
           </div>
@@ -37,7 +41,7 @@ export default function DashboardPage() {
             <p className="text-sm text-muted-foreground">Recent Patients</p>
           </div>
         </div>
-        <div className="stat-card">
+        <div className="stat-card opacity-0 animate-fade-in-up transition-transform duration-200 hover:scale-[1.03] hover:shadow-md" style={{ animationDelay: '0.3s' }}>
           <p className="text-sm text-muted-foreground mb-2">Dosha Distribution</p>
           <div className="flex gap-2">
             <span className="dosha-badge-vata">Vata: {doshaCount.Vata}</span>
@@ -48,9 +52,9 @@ export default function DashboardPage() {
       </div>
 
       {/* Quick action */}
-      <div>
+      <div className="opacity-0 animate-fade-in-up" style={{ animationDelay: '0.35s' }}>
         <Link to="/patients/add">
-          <Button className="gap-2">
+          <Button className="gap-2 transition-transform duration-200 hover:scale-[1.03] active:scale-[0.97]">
             <UserPlus className="w-4 h-4" />
             Add New Patient
           </Button>
@@ -59,7 +63,7 @@ export default function DashboardPage() {
 
       {/* Recent patients */}
       {recent.length > 0 && (
-        <div className="bg-card border rounded-xl overflow-hidden">
+        <div className="bg-card border rounded-xl overflow-hidden opacity-0 animate-fade-in-up shadow-sm" style={{ animationDelay: '0.4s' }}>
           <div className="px-6 py-4 border-b">
             <h2 className="font-display text-lg font-semibold">Recent Patients</h2>
           </div>
@@ -73,8 +77,12 @@ export default function DashboardPage() {
               </tr>
             </thead>
             <tbody>
-              {recent.map(p => (
-                <tr key={p.id} className="border-t">
+              {recent.map((p, i) => (
+                <tr
+                  key={p.id}
+                  className="border-t opacity-0 animate-slide-in-left transition-colors duration-150 hover:bg-muted/30"
+                  style={{ animationDelay: `${0.5 + i * 0.08}s` }}
+                >
                   <td className="px-6 py-3 font-medium">{p.name}</td>
                   <td className="px-6 py-3">
                     <span className={`dosha-badge-${p.dosha.toLowerCase()}`}>{p.dosha}</span>
