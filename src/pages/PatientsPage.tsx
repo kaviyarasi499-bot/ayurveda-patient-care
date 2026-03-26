@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { getPatients, deletePatient, getBMICategory } from '@/lib/store';
 import { Link } from 'react-router-dom';
+import PageTransition from '@/components/PageTransition';
 import { Button } from '@/components/ui/button';
 import { UserPlus, Trash2, Eye, Edit } from 'lucide-react';
 
