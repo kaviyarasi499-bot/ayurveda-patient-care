@@ -49,6 +49,7 @@ export default function AddPatientPage() {
   const update = (field: string, value: string) => setForm(f => ({ ...f, [field]: value }));
 
   return (
+    <PageTransition>
     <div className="max-w-2xl mx-auto space-y-6">
       <h1 className="font-display text-3xl font-bold text-foreground">
         {id ? 'Edit Patient' : 'Add New Patient'}
