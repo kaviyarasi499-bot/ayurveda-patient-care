@@ -197,6 +197,18 @@ export function login(username: string, password: string): boolean {
   return false;
 }
 
+export function signup(username: string, password: string): { success: boolean; error?: string } {
+  const users = JSON.parse(localStorage.getItem('users') || '[]');
+  if (users.find((u: any) => u.username === username)) {
+    return { success: false, error: 'Username already exists' };
+  }
+  const newUser = { id: generateId(), username, password };
+  users.push(newUser);
+  localStorage.setItem('users', JSON.stringify(users));
+  localStorage.setItem('currentUser', JSON.stringify(newUser));
+  return { success: true };
+}
+
 export function logout() {
   localStorage.removeItem('currentUser');
 }
