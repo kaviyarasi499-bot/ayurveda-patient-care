@@ -9,6 +9,7 @@ import DashboardPage from "./pages/DashboardPage";
 import PatientsPage from "./pages/PatientsPage";
 import AddPatientPage from "./pages/AddPatientPage";
 import PatientDetailPage from "./pages/PatientDetailPage";
+import SettingsPage from "./pages/SettingsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
