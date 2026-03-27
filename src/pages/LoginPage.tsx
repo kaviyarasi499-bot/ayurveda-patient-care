@@ -49,7 +49,7 @@ export default function LoginPage() {
             <Leaf className="w-10 h-10 text-primary-foreground" />
           </div>
           <h1 className="font-display text-4xl font-bold text-foreground tracking-tight drop-shadow-sm">AyurVeda</h1>
-          <p className="text-muted-foreground mt-2 flex items-center justify-center gap-1.5">
+          <p className="mt-2 flex items-center justify-center gap-1.5 text-secondary-foreground">
             <Sparkles className="w-3.5 h-3.5 text-accent" />
             Practice Management System
             <Sparkles className="w-3.5 h-3.5 text-accent" />
