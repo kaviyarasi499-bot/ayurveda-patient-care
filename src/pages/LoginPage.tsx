@@ -37,9 +37,9 @@ export default function LoginPage() {
           alt=""
           width={1920}
           height={1080}
-          className="w-full h-full object-cover scale-110 blur-sm"
+          className="w-full h-full object-cover scale-105 blur-[2px]"
         />
-        <div className="absolute inset-0 bg-background/70 backdrop-blur-sm" />
+        <div className="absolute inset-0 bg-background/40 backdrop-blur-[1px]" />
       </div>
 
       <div className="w-full max-w-sm relative z-10 px-4">
