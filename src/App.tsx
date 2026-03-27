@@ -28,6 +28,7 @@ const App = () => (
             <Route path="/patients/add" element={<AddPatientPage />} />
             <Route path="/patients/:id" element={<PatientDetailPage />} />
             <Route path="/patients/:id/edit" element={<AddPatientPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

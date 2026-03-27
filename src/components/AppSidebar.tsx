@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, UserPlus, LogOut, Leaf } from 'lucide-react';
+import { LayoutDashboard, Users, UserPlus, LogOut, Leaf, Settings } from 'lucide-react';
 import { logout } from '@/lib/store';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,6 +7,7 @@ const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/patients', icon: Users, label: 'Patients' },
   { to: '/patients/add', icon: UserPlus, label: 'Add Patient' },
+  { to: '/settings', icon: Settings, label: 'Settings' },
 ];
 
 export default function AppSidebar() {
