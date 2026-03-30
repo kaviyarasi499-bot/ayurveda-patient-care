@@ -37,6 +37,7 @@ export default function PatientsPage() {
           <table className="w-full text-sm">
             <thead className="bg-muted/50">
               <tr>
+                <th className="text-left px-6 py-3 text-muted-foreground font-medium">Patient ID</th>
                 <th className="text-left px-6 py-3 text-muted-foreground font-medium">Name</th>
                 <th className="text-left px-6 py-3 text-muted-foreground font-medium">Age</th>
                 <th className="text-left px-6 py-3 text-muted-foreground font-medium">Gender</th>
@@ -49,6 +50,7 @@ export default function PatientsPage() {
             <tbody>
               {patients.map(p => (
                 <tr key={p.id} className="border-t hover:bg-muted/30 transition-colors">
+                  <td className="px-6 py-3 font-mono text-sm text-muted-foreground">{p.patientId || '—'}</td>
                   <td className="px-6 py-3 font-medium">{p.name}</td>
                   <td className="px-6 py-3">{p.age}</td>
                   <td className="px-6 py-3">{p.gender}</td>
