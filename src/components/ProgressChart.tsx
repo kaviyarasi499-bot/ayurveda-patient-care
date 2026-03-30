@@ -1,11 +1,10 @@
-import { ProgressRecord } from '@/lib/store';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, ReferenceLine, Area, AreaChart
 } from 'recharts';
 
 interface ProgressChartProps {
-  records: ProgressRecord[];
+  records: { date: string; weight: number }[];
   initialWeight: number;
 }
 
