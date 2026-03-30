@@ -66,11 +66,22 @@ export function getPatient(id: string): Patient | undefined {
   return getPatients().find(p => p.id === id);
 }
 
-export function addPatient(data: Omit<Patient, 'id' | 'bmi' | 'createdAt'>): Patient {
+// Generate a short patient ID like "AYR-0001"
+function generatePatientId(): string {
+  const patients = getPatients();
+  const maxNum = patients.reduce((max, p) => {
+    const match = p.patientId?.match(/AYR-(\d+)/);
+    return match ? Math.max(max, parseInt(match[1])) : max;
+  }, 0);
+  return `AYR-${String(maxNum + 1).padStart(4, '0')}`;
+}
+
+export function addPatient(data: Omit<Patient, 'id' | 'patientId' | 'bmi' | 'createdAt'>): Patient {
   const patients = getPatients();
   const patient: Patient = {
     ...data,
     id: generateId(),
+    patientId: generatePatientId(),
     bmi: calculateBMI(data.weight, data.height),
     createdAt: new Date().toISOString(),
   };
