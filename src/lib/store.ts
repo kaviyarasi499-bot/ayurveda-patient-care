@@ -91,7 +91,7 @@ export function addPatient(data: Omit<Patient, 'id' | 'patientId' | 'bmi' | 'cre
   return patient;
 }
 
-export function updatePatient(id: string, data: Omit<Patient, 'id' | 'bmi' | 'createdAt'>): Patient | undefined {
+export function updatePatient(id: string, data: Omit<Patient, 'id' | 'patientId' | 'bmi' | 'createdAt'>): Patient | undefined {
   const patients = getPatients();
   const idx = patients.findIndex(p => p.id === id);
   if (idx === -1) return undefined;
