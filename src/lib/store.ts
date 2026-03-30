@@ -3,6 +3,7 @@
 
 export interface Patient {
   id: string;
+  patientId: string; // Visible ID like "AYR-0001"
   name: string;
   age: number;
   gender: string;
