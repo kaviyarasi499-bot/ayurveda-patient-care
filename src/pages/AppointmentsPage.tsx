@@ -44,8 +44,6 @@ export default function AppointmentsPage() {
   }, [isAdmin]);
 
   if (!isAdmin) return <Navigate to="/" replace />;
-    loadData();
-  }, []);
 
   const loadData = async () => {
     const [pRes, aRes] = await Promise.all([
