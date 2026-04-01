@@ -6,9 +6,16 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
-import { User, Lock, Shield, Sun, Moon, Pencil } from 'lucide-react';
+import { User, Lock, Shield, Sun, Moon, Pencil, Users, Crown } from 'lucide-react';
 import PageTransition from '@/components/PageTransition';
+
+interface UserWithRole {
+  user_id: string;
+  display_name: string | null;
+  role: 'admin' | 'customer';
+}
 
 export default function SettingsPage() {
   const { user, displayName, isAdmin } = useAuth();
@@ -18,6 +25,8 @@ export default function SettingsPage() {
   const [editingName, setEditingName] = useState(false);
   const [currentName, setCurrentName] = useState(displayName);
   const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
+  const [allUsers, setAllUsers] = useState<UserWithRole[]>([]);
+  const [updatingRole, setUpdatingRole] = useState<string | null>(null);
 
   useEffect(() => { setCurrentName(displayName); }, [displayName]);
 
@@ -30,6 +39,52 @@ export default function SettingsPage() {
       localStorage.setItem('theme', 'light');
     }
   }, [isDark]);
+
+  useEffect(() => {
+    if (isAdmin) loadUsers();
+  }, [isAdmin]);
+
+  const loadUsers = async () => {
+    const [profilesRes, rolesRes] = await Promise.all([
+      supabase.from('profiles').select('user_id, display_name'),
+      supabase.from('user_roles').select('user_id, role'),
+    ]);
+
+    const profiles = profilesRes.data || [];
+    const roles = rolesRes.data || [];
+
+    // Admins can see all profiles now; merge with roles
+    const merged: UserWithRole[] = profiles.map(p => {
+      const userRole = roles.find(r => r.user_id === p.user_id);
+      return {
+        user_id: p.user_id,
+        display_name: p.display_name,
+        role: (userRole?.role as 'admin' | 'customer') || 'customer',
+      };
+    });
+    setAllUsers(merged);
+  };
+
+  const handleRoleChange = async (targetUserId: string, newRole: string) => {
+    if (targetUserId === user?.id) {
+      toast.error("You cannot change your own role");
+      return;
+    }
+    setUpdatingRole(targetUserId);
+    try {
+      const { data, error } = await supabase.functions.invoke('manage-roles', {
+        body: { action: 'set_role', target_user_id: targetUserId, role: newRole },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      toast.success(`Role updated to ${newRole}`);
+      loadUsers();
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to update role');
+    } finally {
+      setUpdatingRole(null);
+    }
+  };
 
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -126,6 +181,49 @@ export default function SettingsPage() {
             </form>
           </CardContent>
         </Card>
+
+        {isAdmin && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2"><Users className="w-5 h-5 text-primary" /> User Role Management</CardTitle>
+              <CardDescription>Promote or demote users between Admin and Customer roles</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {allUsers.length === 0 ? (
+                <p className="text-sm text-muted-foreground">No users found.</p>
+              ) : (
+                <div className="space-y-3">
+                  {allUsers.map(u => (
+                    <div key={u.user_id} className="flex items-center justify-between p-3 rounded-lg border bg-muted/30">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
+                          {u.role === 'admin' ? <Crown className="w-4 h-4 text-accent" /> : <User className="w-4 h-4 text-muted-foreground" />}
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-foreground">{u.display_name || 'Unnamed'}</p>
+                          {u.user_id === user?.id && <span className="text-xs text-muted-foreground">(You)</span>}
+                        </div>
+                      </div>
+                      <Select
+                        value={u.role}
+                        onValueChange={(val) => handleRoleChange(u.user_id, val)}
+                        disabled={u.user_id === user?.id || updatingRole === u.user_id}
+                      >
+                        <SelectTrigger className="w-[130px]">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="admin">Admin</SelectItem>
+                          <SelectItem value="customer">Customer</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
       </div>
     </PageTransition>
   );
