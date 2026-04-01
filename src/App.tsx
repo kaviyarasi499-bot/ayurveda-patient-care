@@ -11,7 +11,9 @@ import PatientsPage from "./pages/PatientsPage";
 import AddPatientPage from "./pages/AddPatientPage";
 import PatientDetailPage from "./pages/PatientDetailPage";
 import SettingsPage from "./pages/SettingsPage";
+import AppointmentsPage from "./pages/AppointmentsPage";
 import NotFound from "./pages/NotFound";
+import AIChatbot from "./components/AIChatbot";
 
 const queryClient = new QueryClient();
 
@@ -30,10 +32,12 @@ const App = () => (
               <Route path="/patients/add" element={<AddPatientPage />} />
               <Route path="/patients/:id" element={<PatientDetailPage />} />
               <Route path="/patients/:id/edit" element={<AddPatientPage />} />
+              <Route path="/appointments" element={<AppointmentsPage />} />
               <Route path="/settings" element={<SettingsPage />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <AIChatbot />
         </BrowserRouter>
       </TooltipProvider>
     </AuthProvider>

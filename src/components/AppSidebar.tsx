@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Users, UserPlus, LogOut, Leaf, Settings } from 'lucide-react';
+import { LayoutDashboard, Users, UserPlus, LogOut, Leaf, Settings, CalendarClock } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function AppSidebar() {
@@ -11,6 +11,7 @@ export default function AppSidebar() {
     { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
     { to: '/patients', icon: Users, label: 'Patients' },
     { to: '/patients/add', icon: UserPlus, label: 'Add Patient' },
+    ...(isAdmin ? [{ to: '/appointments', icon: CalendarClock, label: 'Appointments' }] : []),
     { to: '/settings', icon: Settings, label: 'Settings' },
   ];
 

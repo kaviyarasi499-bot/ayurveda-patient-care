@@ -38,9 +38,12 @@ export default function AppointmentsPage() {
   const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  if (!isAdmin) return <Navigate to="/" replace />;
-
   useEffect(() => {
+    if (!isAdmin) return;
+    loadData();
+  }, [isAdmin]);
+
+  if (!isAdmin) return <Navigate to="/" replace />;
     loadData();
   }, []);
 
