@@ -100,6 +100,9 @@ export default function LoginPage() {
           <h2 className="text-lg font-semibold text-center text-foreground">
             {isSignUp ? 'Create Account' : 'Sign In'}
           </h2>
+          <p className="text-xs text-center text-muted-foreground">
+            For Admins &amp; Customers — role is auto-detected after sign in
+          </p>
 
           {/* Google Sign-In */}
           <Button
