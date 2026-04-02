@@ -24,7 +24,7 @@ interface Patient {
 }
 
 export default function PatientsPage() {
-  const { isAdmin } = useAuth();
+  const { isAdmin, loading } = useAuth();
   const [patients, setPatients] = useState<Patient[]>([]);
 
   const fetchPatients = async () => {
@@ -42,15 +42,60 @@ export default function PatientsPage() {
     fetchPatients();
   };
 
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center"><p className="text-muted-foreground">Loading...</p></div>;
+  }
+
+  // Customers see a simplified read-only view
+  if (!isAdmin) {
+    return (
+      <PageTransition>
+        <div className="max-w-5xl mx-auto space-y-6">
+          <div>
+            <h1 className="font-display text-3xl font-bold text-foreground">My Patients</h1>
+            <p className="text-muted-foreground mt-1">{patients.length} patients</p>
+          </div>
+          <Link to="/patients/add">
+            <Button className="gap-2"><UserPlus className="w-4 h-4" /> Add Patient</Button>
+          </Link>
+          {patients.length === 0 ? (
+            <div className="text-center py-16 bg-card border rounded-xl">
+              <p className="text-muted-foreground">No patients yet. Add your first patient to get started.</p>
+            </div>
+          ) : (
+            <div className="grid gap-4 sm:grid-cols-2">
+              {patients.map(p => (
+                <div key={p.id} className="bg-card border rounded-xl p-5 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-semibold text-foreground">{p.name}</h3>
+                    <span className="text-xs font-mono text-muted-foreground">{p.patient_id}</span>
+                  </div>
+                  <div className="flex gap-3 text-sm text-muted-foreground">
+                    <span>Age: {p.age}</span>
+                    <span>{p.gender}</span>
+                    <span className={`dosha-badge-${p.dosha.toLowerCase()}`}>{p.dosha}</span>
+                  </div>
+                  <div className="text-sm text-muted-foreground">BMI: {p.bmi} ({getBMICategory(p.bmi)})</div>
+                  <div className="flex gap-1 pt-1">
+                    <Link to={`/patients/${p.id}/edit`}><Button variant="outline" size="sm" className="gap-1"><Edit className="w-3 h-3" /> Edit</Button></Link>
+                    <Button variant="outline" size="sm" className="gap-1 text-destructive" onClick={() => handleDelete(p.id)}><Trash2 className="w-3 h-3" /> Delete</Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </PageTransition>
+    );
+  }
+
   return (
     <PageTransition>
       <div className="max-w-5xl mx-auto space-y-6">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="font-display text-3xl font-bold text-foreground">Patients</h1>
-            <p className="text-muted-foreground mt-1">
-              {patients.length} {isAdmin ? 'total' : 'your'} patients
-            </p>
+            <p className="text-muted-foreground mt-1">{patients.length} total patients</p>
           </div>
           <Link to="/patients/add">
             <Button className="gap-2"><UserPlus className="w-4 h-4" /> Add Patient</Button>
