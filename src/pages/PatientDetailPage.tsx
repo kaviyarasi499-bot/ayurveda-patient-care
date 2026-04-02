@@ -5,7 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Edit, Utensils, TrendingUp, CheckCircle, XCircle, Download, FileText } from 'lucide-react';
+import { Edit, Utensils, TrendingUp, CheckCircle, XCircle, Download, FileText, Shield } from 'lucide-react';
 import { toast } from 'sonner';
 import PageTransition from '@/components/PageTransition';
 import ProgressChart from '@/components/ProgressChart';
@@ -104,6 +104,7 @@ function generatePatientPDF(patient: Patient, dietPlans: DietPlan[], progress: P
 
 export default function PatientDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const { isAdmin } = useAuth();
   const [patient, setPatient] = useState<Patient | null>(null);
   const [dietPlans, setDietPlans] = useState<DietPlan[]>([]);
   const [progress, setProgress] = useState<ProgressRecord[]>([]);
@@ -115,6 +116,18 @@ export default function PatientDetailPage() {
     supabase.from('diet_plans').select('*').eq('patient_id', id).order('date', { ascending: false }).then(({ data }) => setDietPlans(data || []));
     supabase.from('progress_records').select('*').eq('patient_id', id).order('date').then(({ data }) => setProgress(data || []));
   }, [id]);
+
+  if (!isAdmin) {
+    return (
+      <PageTransition>
+        <div className="text-center py-16">
+          <Shield className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-foreground mb-2">Admin Access Only</h2>
+          <p className="text-muted-foreground">Only admins can view patient details.</p>
+        </div>
+      </PageTransition>
+    );
+  }
 
   if (!patient) {
     return <div className="text-center py-16"><p className="text-muted-foreground">Loading...</p></div>;

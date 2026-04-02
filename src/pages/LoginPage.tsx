@@ -16,6 +16,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [loginMode, setLoginMode] = useState<'admin' | 'customer'>('customer');
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center"><p className="text-muted-foreground">Loading...</p></div>;
@@ -92,16 +93,44 @@ export default function LoginPage() {
           </p>
         </div>
 
-        <form
-          onSubmit={handleSubmit}
-          className="bg-card/90 backdrop-blur-md border rounded-xl p-6 space-y-4 shadow-2xl opacity-0 animate-fade-in-up"
+        <div
+          className="bg-card/90 backdrop-blur-md border rounded-xl shadow-2xl opacity-0 animate-fade-in-up overflow-hidden"
           style={{ animationDelay: '0.2s' }}
         >
+          {/* Admin / Customer Tabs */}
+          <div className="flex border-b">
+            <button
+              type="button"
+              onClick={() => setLoginMode('customer')}
+              className={`flex-1 py-3 text-sm font-medium transition-colors ${
+                loginMode === 'customer'
+                  ? 'bg-primary/10 text-primary border-b-2 border-primary'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              Customer
+            </button>
+            <button
+              type="button"
+              onClick={() => setLoginMode('admin')}
+              className={`flex-1 py-3 text-sm font-medium transition-colors ${
+                loginMode === 'admin'
+                  ? 'bg-accent/10 text-accent border-b-2 border-accent'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              Admin
+            </button>
+          </div>
+
+          <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <h2 className="text-lg font-semibold text-center text-foreground">
-            {isSignUp ? 'Create Account' : 'Sign In'}
+            {loginMode === 'admin' ? '🛡️ Admin' : '👤 Customer'} {isSignUp ? 'Sign Up' : 'Sign In'}
           </h2>
           <p className="text-xs text-center text-muted-foreground">
-            For Admins &amp; Customers — role is auto-detected after sign in
+            {loginMode === 'admin'
+              ? 'Sign in with your admin credentials to access all features'
+              : 'Sign in to manage your patients and appointments'}
           </p>
 
           {/* Google Sign-In */}
@@ -146,6 +175,7 @@ export default function LoginPage() {
             </button>
           </p>
         </form>
+        </div>
       </div>
     </div>
   );
