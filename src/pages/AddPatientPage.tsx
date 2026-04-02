@@ -68,7 +68,7 @@ export default function AddPatientPage() {
       const { error } = await supabase.from('patients').update(patientData).eq('id', id);
       if (error) { toast.error(error.message); return; }
     } else {
-      const { error } = await supabase.from('patients').insert({ ...patientData, patient_id: '' });
+      const { error } = await supabase.from('patients').insert({ ...patientData, patient_id: 'TEMP' });
       if (error) { toast.error(error.message); return; }
     }
     navigate('/patients');
