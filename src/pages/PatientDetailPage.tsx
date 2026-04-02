@@ -117,6 +117,18 @@ export default function PatientDetailPage() {
     supabase.from('progress_records').select('*').eq('patient_id', id).order('date').then(({ data }) => setProgress(data || []));
   }, [id]);
 
+  if (!isAdmin) {
+    return (
+      <PageTransition>
+        <div className="text-center py-16">
+          <Shield className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-foreground mb-2">Admin Access Only</h2>
+          <p className="text-muted-foreground">Only admins can view patient details.</p>
+        </div>
+      </PageTransition>
+    );
+  }
+
   if (!patient) {
     return <div className="text-center py-16"><p className="text-muted-foreground">Loading...</p></div>;
   }
