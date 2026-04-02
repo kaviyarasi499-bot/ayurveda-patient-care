@@ -5,7 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Edit, Utensils, TrendingUp, CheckCircle, XCircle, Download, FileText } from 'lucide-react';
+import { Edit, Utensils, TrendingUp, CheckCircle, XCircle, Download, FileText, Shield } from 'lucide-react';
 import { toast } from 'sonner';
 import PageTransition from '@/components/PageTransition';
 import ProgressChart from '@/components/ProgressChart';
