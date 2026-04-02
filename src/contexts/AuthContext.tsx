@@ -33,21 +33,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(session?.user ?? null);
 
         if (session?.user) {
-          // Fetch role and profile using setTimeout to avoid Supabase deadlock
-          setTimeout(async () => {
-            const { data: roles } = await supabase
-              .from('user_roles')
-              .select('role')
-              .eq('user_id', session.user.id);
-            setIsAdmin(roles?.some(r => r.role === 'admin') ?? false);
-
-            const { data: profile } = await supabase
-              .from('profiles')
-              .select('display_name')
-              .eq('user_id', session.user.id)
-              .single();
-            setDisplayName(profile?.display_name || session.user.email || '');
-          }, 0);
+          try {
+            const [rolesResult, profileResult] = await Promise.all([
+              supabase
+                .from('user_roles')
+                .select('role')
+                .eq('user_id', session.user.id),
+              supabase
+                .from('profiles')
+                .select('display_name')
+                .eq('user_id', session.user.id)
+                .single(),
+            ]);
+            setIsAdmin(rolesResult.data?.some(r => r.role === 'admin') ?? false);
+            setDisplayName(profileResult.data?.display_name || session.user.email || '');
+          } catch {
+            setIsAdmin(false);
+            setDisplayName(session.user.email || '');
+          }
         } else {
           setIsAdmin(false);
           setDisplayName('');
