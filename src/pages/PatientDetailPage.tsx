@@ -104,6 +104,7 @@ function generatePatientPDF(patient: Patient, dietPlans: DietPlan[], progress: P
 
 export default function PatientDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const { isAdmin } = useAuth();
   const [patient, setPatient] = useState<Patient | null>(null);
   const [dietPlans, setDietPlans] = useState<DietPlan[]>([]);
   const [progress, setProgress] = useState<ProgressRecord[]>([]);
